@@ -1,0 +1,513 @@
+/* ═══════════════════════════════════════════════
+   JobPortal — Global Stylesheet
+   Dark Theme · Plus Jakarta Sans + Space Grotesk
+═══════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+/* ── CSS VARIABLES ── */
+:root {
+  --bg:      #070d1a;
+  --surface: #0e1628;
+  --card:    #121d32;
+  --card2:   #172038;
+  --border:  #1a2a45;
+  --accent:  #4f8ef7;
+  --accent2: #0ea5e9;
+  --teal:    #2dd4bf;
+  --gold:    #fbbf24;
+  --text:    #e2e8f0;
+  --text2:   #94a3b8;
+  --muted:   #4a5f7a;
+  --success: #34d399;
+  --error:   #ef4444;
+  --font-r:  'Plus Jakarta Sans', sans-serif;
+  --font-h:  'Space Grotesk', sans-serif;
+}
+
+/* ── GLOBAL RESET ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg) !important;
+  color: var(--text) !important;
+  font-family: var(--font-r) !important;
+  font-size: 16px;
+  line-height: 1.6;
+  scroll-behavior: smooth;
+}
+
+/* body as flex column so footer always sticks to bottom */
+body {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* ── KILL ALL BASE.HTML CONTAINER WHITEBOX ── */
+/* These selectors nuke any white background coming from old base.html styles */
+.container,
+#container,
+.wrapper,
+#wrapper,
+main,
+#main,
+#content,
+.content,
+.page,
+.page-wrapper,
+[class*="container"],
+[class*="wrapper"] {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Zero out body padding that old style.css added */
+body > .container,
+body > .wrapper,
+body > div:not([class*="jp-"]):not([class*="login"]):not([class*="register"]):not([class*="pj-"]):not([class*="jl-"]) {
+  padding: 0 !important;
+  margin: 0 !important;
+  max-width: none !important;
+}
+
+/* ── MAIN CONTENT FLEX GROW ── */
+/* All page wrappers grow to push footer to very bottom */
+.jp-page-container,
+.login-page,
+.register-page,
+.pj-page,
+.jl-page,
+.jp-hero,
+.jp-main,
+.detail-page {
+  flex: 1 !important;
+}
+
+/* ── PAGE CONTAINER ── */
+.jp-page-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+  width: 100%;
+}
+
+.jp-page-container:empty { display: none; }
+
+/* ── TYPOGRAPHY ── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-h);
+  color: var(--text);
+  line-height: 1.2;
+  letter-spacing: -.02em;
+}
+
+h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); margin-bottom: 1rem; }
+h2 { font-size: clamp(1.4rem, 3vw, 2rem);   margin-bottom: .8rem; }
+h3 { font-size: 1.25rem; margin-bottom: .6rem; }
+
+p  { color: var(--text2); margin-bottom: 1rem; line-height: 1.75; }
+
+a  { color: var(--accent); text-decoration: none; transition: color .18s; }
+a:hover { color: var(--accent2); }
+
+/* ── CARD ── */
+.jp-card-base {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 1.8rem;
+}
+
+/* ── FORMS ── */
+form { width: 100%; }
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: .45rem;
+  margin-bottom: 1.2rem;
+}
+
+label {
+  font-size: .78rem;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-weight: 600;
+}
+
+/* Force ALL inputs dark — override any browser or base.html defaults */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+input[type="url"],
+input[type="tel"],
+textarea,
+select {
+  width: 100% !important;
+  background: var(--card) !important;
+  background-color: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+  padding: .82rem 1rem !important;
+  border-radius: 12px !important;
+  font-size: .95rem !important;
+  font-family: var(--font-r) !important;
+  font-weight: 400 !important;
+  transition: border-color .2s, box-shadow .2s, background .2s !important;
+  outline: none !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  /* Kill browser autofill white bg */
+  -webkit-box-shadow: 0 0 0 1000px var(--card) inset !important;
+  -webkit-text-fill-color: var(--text) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted) !important;
+  opacity: 1;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(79,142,247,.18) !important;
+  background: var(--card2) !important;
+  background-color: var(--card2) !important;
+  -webkit-box-shadow: 0 0 0 3px rgba(79,142,247,.18), 0 0 0 1000px var(--card2) inset !important;
+}
+
+/* autofill overrides */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px var(--card) inset !important;
+  -webkit-text-fill-color: var(--text) !important;
+  caret-color: var(--text);
+  border-color: var(--border) !important;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
+}
+
+select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='8' viewBox='0 0 13 8'%3E%3Cpath d='M1 1l5.5 5.5L12 1' stroke='%234a5f7a' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 1rem center !important;
+  padding-right: 2.5rem !important;
+}
+
+select option {
+  background: var(--surface);
+  background-color: var(--surface);
+  color: var(--text);
+}
+
+/* ── BUTTONS ── */
+button,
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  font-family: var(--font-r);
+  font-size: .92rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  padding: .8rem 1.6rem;
+  cursor: pointer;
+  transition: transform .15s, box-shadow .2s, opacity .2s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-primary,
+button[type="submit"] {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(79,142,247,.3);
+}
+
+.btn-primary:hover,
+button[type="submit"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(79,142,247,.45);
+  color: #fff;
+}
+
+.btn-ghost {
+  background: rgba(255,255,255,.05);
+  color: var(--text2);
+  border: 1px solid var(--border);
+}
+
+.btn-ghost:hover {
+  background: rgba(255,255,255,.09);
+  color: var(--text);
+}
+
+.btn-danger {
+  background: rgba(239,68,68,.1);
+  color: var(--error);
+  border: 1px solid rgba(239,68,68,.2);
+}
+
+.btn-danger:hover {
+  background: var(--error);
+  color: #fff;
+}
+
+button:active, .btn:active { transform: translateY(0) scale(.98); }
+
+/* ── APPLY BUTTON ── */
+.apply-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  font-family: var(--font-h);
+  font-weight: 700;
+  font-size: 1rem;
+  padding: .9rem 2rem;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: transform .15s, box-shadow .2s;
+  box-shadow: 0 8px 24px rgba(79,142,247,.35);
+  border: none;
+  cursor: pointer;
+}
+
+.apply-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px rgba(79,142,247,.5);
+  color: #fff;
+}
+
+/* ── JOB CARDS ── */
+.job-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 1.5rem;
+  margin-bottom: 1.2rem;
+  transition: transform .2s, border-color .2s, box-shadow .2s;
+}
+
+.job-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(79,142,247,.4);
+  box-shadow: 0 16px 40px rgba(0,0,0,.5);
+}
+
+.job-card h3 a {
+  color: var(--text);
+  font-family: var(--font-h);
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.job-card h3 a:hover { color: var(--accent); }
+.job-card p { color: var(--text2); margin-bottom: .4rem; font-size: .9rem; }
+.job-card strong { color: var(--text); }
+
+/* ── HERO ── */
+.hero {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--bg);
+}
+
+.hero h1 { color: var(--text); font-size: clamp(2rem, 5vw, 3.5rem); }
+.hero p  { color: var(--text2); }
+
+/* ── FILTER BOX ── */
+.filter-box {
+  display: flex;
+  gap: .8rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-box select {
+  padding: .7rem 1rem;
+  border-radius: 10px;
+  min-width: 160px;
+}
+
+/* ── JOB DETAIL ── */
+.job-detail {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2rem;
+}
+
+.job-detail h1 { color: var(--text); }
+
+.job-description {
+  color: var(--text2);
+  line-height: 1.85;
+  font-size: .95rem;
+}
+
+.job-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: .5rem 1rem;
+  border-radius: 10px;
+  font-size: .85rem;
+  color: var(--text2);
+  margin-bottom: .6rem;
+}
+
+/* ── ALERTS ── */
+.alert {
+  padding: .9rem 1.2rem;
+  border-radius: 12px;
+  margin-bottom: 1.2rem;
+  font-size: .9rem;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+
+.alert-error   { background: rgba(239,68,68,.1);  border: 1px solid rgba(239,68,68,.25);  color: #fca5a5; }
+.alert-success { background: rgba(52,211,153,.1);  border: 1px solid rgba(52,211,153,.25); color: #6ee7b7; }
+.alert-info    { background: rgba(79,142,247,.1);  border: 1px solid rgba(79,142,247,.25); color: #93c5fd; }
+
+/* ── BADGES ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: .28rem .8rem;
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+}
+
+.badge-blue  { background: rgba(79,142,247,.1);  color: var(--accent);  border: 1px solid rgba(79,142,247,.22); }
+.badge-green { background: rgba(52,211,153,.1);  color: var(--success); border: 1px solid rgba(52,211,153,.22); }
+.badge-gold  { background: rgba(251,191,36,.1);  color: var(--gold);    border: 1px solid rgba(251,191,36,.22); }
+.badge-muted { background: rgba(74,95,122,.12);  color: var(--text2);   border: 1px solid rgba(74,95,122,.25); }
+
+/* ── DIVIDER ── */
+.jp-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 1.5rem 0;
+}
+
+/* ── GRID ── */
+.jobs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1.3rem;
+  margin-top: 1.5rem;
+}
+
+/* ══════════════════════════════════════════════
+   FOOTER — flush to bottom, no gaps, no grey bg
+══════════════════════════════════════════════ */
+.jp-footer {
+  background: var(--bg) !important;        /* same as page — no grey block */
+  border-top: 1px solid var(--border);
+  padding: 1.4rem 2rem;
+  width: 100%;
+  margin: 0;                               /* no top margin gap */
+  flex-shrink: 0;                          /* never shrink in flex column body */
+}
+
+.jp-footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .8rem;
+}
+
+.jp-footer-brand {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+}
+
+.jp-footer-logo {
+  width: 26px; height: 26px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .85rem;
+  flex-shrink: 0;
+}
+
+.jp-footer-name {
+  font-family: var(--font-h);
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--text2);
+}
+
+.jp-footer-copy {
+  font-size: .78rem;
+  color: var(--muted);
+  margin: 0;
+}
+
+.jp-footer-links {
+  display: flex;
+  gap: 1.3rem;
+}
+
+.jp-footer-links a {
+  font-size: .78rem;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color .18s;
+}
+
+.jp-footer-links a:hover { color: var(--text2); }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+/* ── TEXT SELECTION ── */
+::selection { background: rgba(79,142,247,.3); color: var(--text); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .jp-page-container { padding: 1.5rem 1rem 3rem; }
+  .jp-footer-inner   { flex-direction: column; text-align: center; gap: .6rem; }
+  .jp-footer-links   { justify-content: center; }
+  .jobs-grid         { grid-template-columns: 1fr; }
+  .jp-footer         { padding: 1.2rem 1rem; }
+}

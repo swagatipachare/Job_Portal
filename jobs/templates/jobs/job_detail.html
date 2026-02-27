@@ -1,0 +1,629 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #0a0f1e;
+    --surface: #111827;
+    --card: #161f35;
+    --border: #1e2d4a;
+    --accent: #3b82f6;
+    --accent2: #06b6d4;
+    --gold: #f59e0b;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --success: #10b981;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ── PAGE LAYOUT ── */
+  .detail-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  /* ── BACK LINK ── */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: .88rem;
+    margin-bottom: 1.5rem;
+    transition: color .2s;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .back-link:hover { color: var(--accent); }
+
+  /* ── MAIN JOB CARD ── */
+  .job-main {
+    animation: fadeUp .5s ease both;
+  }
+
+  .job-hero-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 2.2rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .job-hero-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+
+  .job-hero-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at top left, rgba(59,130,246,.07), transparent 60%);
+    pointer-events: none;
+  }
+
+  .job-header-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .company-logo {
+    width: 60px; height: 60px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: #fff;
+    flex-shrink: 0;
+    box-shadow: 0 8px 24px rgba(59,130,246,.3);
+  }
+
+  .job-header-info { flex: 1; min-width: 200px; }
+
+  .job-title-main {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -.02em;
+    margin-bottom: .4rem;
+    color: var(--text);
+  }
+
+  .job-company-loc {
+    color: var(--muted);
+    font-size: .95rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex-wrap: wrap;
+  }
+
+  .dot { color: var(--border); }
+
+  .badges-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .badge {
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    padding: .35rem .9rem;
+    border-radius: 999px;
+  }
+
+  .badge-intern   { background: rgba(245,158,11,.12); color: var(--gold);    border: 1px solid rgba(245,158,11,.25); }
+  .badge-fresher  { background: rgba(16,185,129,.12);  color: var(--success); border: 1px solid rgba(16,185,129,.25); }
+  .badge-fulltime { background: rgba(59,130,246,.12);  color: var(--accent);  border: 1px solid rgba(59,130,246,.25); }
+  .badge-skill    { background: rgba(6,182,212,.08);   color: var(--accent2); border: 1px solid rgba(6,182,212,.2);  }
+  .badge-default  { background: rgba(100,116,139,.12); color: var(--muted);   border: 1px solid rgba(100,116,139,.25); }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+
+  .info-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1rem 1.2rem;
+  }
+
+  .info-label {
+    font-size: .72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    margin-bottom: .35rem;
+  }
+
+  .info-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .info-value.salary-val {
+    color: var(--success);
+    font-size: 1.15rem;
+  }
+
+  /* ── CONTENT SECTIONS ── */
+  .content-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 1.8rem 2rem;
+    margin-bottom: 1.5rem;
+    animation: fadeUp .5s .1s ease both;
+  }
+
+  .section-heading {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    color: var(--text);
+  }
+
+  .section-heading span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px;
+    background: rgba(59,130,246,.12);
+    border-radius: 8px;
+    font-size: .9rem;
+  }
+
+  .job-description {
+    color: #94a3b8;
+    line-height: 1.85;
+    font-size: .95rem;
+    font-weight: 300;
+  }
+
+  /* ── APPLY CARD (sticky sidebar top) ── */
+  .sidebar { position: sticky; top: 2rem; }
+
+  .apply-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 1.8rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp .5s .05s ease both;
+  }
+
+  .apply-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--success), var(--accent2));
+  }
+
+  .apply-salary-big {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--success);
+    margin-bottom: .2rem;
+  }
+
+  .apply-salary-label {
+    font-size: .8rem;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .apply-btn {
+    display: block;
+    width: 100%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    border: none;
+    padding: 1rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+    box-shadow: 0 8px 24px rgba(59,130,246,.3);
+    letter-spacing: .02em;
+    margin-bottom: 1rem;
+  }
+
+  .apply-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 36px rgba(59,130,246,.4);
+  }
+
+  .apply-note {
+    text-align: center;
+    font-size: .78rem;
+    color: var(--muted);
+  }
+
+  /* ── SIDEBAR: FILTERED JOBS ── */
+  .sidebar-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    animation: fadeUp .5s .15s ease both;
+  }
+
+  .sidebar-box-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: .95rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text);
+  }
+
+  .sidebar-box-title .count-pill {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    font-size: .72rem;
+    color: var(--muted);
+    padding: .2rem .6rem;
+    border-radius: 999px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 400;
+  }
+
+  /* mini filter form in sidebar */
+  .mini-filter {
+    display: flex;
+    flex-direction: column;
+    gap: .7rem;
+    margin-bottom: 1rem;
+  }
+
+  .mini-filter select {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: .6rem .9rem;
+    border-radius: 10px;
+    font-size: .85rem;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    width: 100%;
+    appearance: none;
+    cursor: pointer;
+    transition: border-color .2s;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748b' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right .8rem center;
+    padding-right: 2rem;
+  }
+
+  .mini-filter select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .mini-filter-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: .6rem;
+    border-radius: 10px;
+    font-size: .85rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: opacity .2s;
+  }
+
+  .mini-filter-btn:hover { opacity: .85; }
+
+  /* mini job cards in sidebar */
+  .mini-job-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: .8rem;
+    text-decoration: none;
+    display: block;
+    transition: border-color .2s, transform .15s;
+  }
+
+  .mini-job-card:hover {
+    border-color: rgba(59,130,246,.4);
+    transform: translateX(3px);
+  }
+
+  .mini-job-card.is-current {
+    border-color: var(--accent);
+    background: rgba(59,130,246,.07);
+  }
+
+  .mini-job-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: .88rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: .25rem;
+  }
+
+  .mini-job-company {
+    font-size: .78rem;
+    color: var(--muted);
+    margin-bottom: .4rem;
+  }
+
+  .mini-job-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .mini-salary {
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--success);
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  .mini-badge {
+    font-size: .65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    padding: .2rem .6rem;
+    border-radius: 999px;
+  }
+
+  .no-results {
+    text-align: center;
+    color: var(--muted);
+    font-size: .85rem;
+    padding: 1.5rem;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity:0; transform: translateY(20px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .detail-page {
+      grid-template-columns: 1fr;
+    }
+    .sidebar {
+      position: static;
+      order: -1;
+    }
+    .apply-card { display: none; } /* shown inline on mobile via below */
+    .mobile-apply { display: block !important; }
+  }
+
+  .mobile-apply { display: none; }
+</style>
+
+<div class="detail-page">
+
+  <!-- ══ LEFT: JOB DETAIL ══ -->
+  <div class="job-main">
+
+    <a href="{% url 'job_list' %}" class="back-link">
+      ← Back to All Jobs
+    </a>
+
+    <!-- Hero card -->
+    <div class="job-hero-card">
+      <div class="job-header-row">
+        <div class="company-logo">{{ job.company|first|upper }}</div>
+        <div class="job-header-info">
+          <h1 class="job-title-main">{{ job.title }}</h1>
+          <div class="job-company-loc">
+            {{ job.company }}
+            <span class="dot">·</span>
+            📍 {{ job.location }}
+          </div>
+        </div>
+      </div>
+
+      <div class="badges-row">
+        {% if job.job_type == "intern" %}
+          <span class="badge badge-intern">Internship</span>
+        {% elif job.job_type == "fresher" %}
+          <span class="badge badge-fresher">Fresher</span>
+        {% elif job.job_type == "fulltime" %}
+          <span class="badge badge-fulltime">Full Time</span>
+        {% else %}
+          <span class="badge badge-default">{{ job.job_type }}</span>
+        {% endif %}
+        <span class="badge badge-skill">{{ job.skill }}</span>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label">💰 Salary</div>
+<div class="info-value salary-val">₹{{ job.salary_lpa|floatformat:1 }} LPA</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">📍 Location</div>
+          <div class="info-value">{{ job.location }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">🏢 Company</div>
+          <div class="info-value">{{ job.company }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">🔧 Skill</div>
+          <div class="info-value">{{ job.skill }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile apply button -->
+    <a href="{{ job.apply_link }}" target="_blank" class="apply-btn mobile-apply">
+      🚀 Apply Now
+    </a>
+
+    <!-- Description -->
+    <div class="content-card">
+      <h3 class="section-heading"><span>📋</span> Job Description</h3>
+      <div class="job-description">{{ job.description }}</div>
+    </div>
+
+    <!-- Requirements -->
+    <div class="content-card">
+      <h3 class="section-heading"><span>✅</span> Requirements</h3>
+      <div class="job-description">{{ job.requirements }}</div>
+    </div>
+
+  </div>
+
+  <!-- ══ RIGHT: SIDEBAR ══ -->
+  <div class="sidebar">
+
+    <!-- Apply card -->
+    <div class="apply-card">
+<div class="apply-salary-big">₹{{ job.salary_lpa|floatformat:1 }} LPA</div>
+      <div class="apply-salary-label">per month · {{ job.job_type }}</div>
+      <a href="{{ job.apply_link }}" target="_blank" class="apply-btn">🚀 Apply Now</a>
+      <div class="apply-note">🔒 You'll be redirected to the company's page</div>
+    </div>
+
+    <!-- Filter Box in Sidebar -->
+    <div class="sidebar-box">
+      <div class="sidebar-box-title">
+        🔍 Filter Jobs
+      </div>
+      <form method="GET" action="{% url 'job_list' %}" class="mini-filter">
+        <select name="job_type">
+          <option value="">All Categories</option>
+          <option value="intern"   {% if request.GET.job_type == "intern"   %}selected{% endif %}>Internships</option>
+          <option value="fresher"  {% if request.GET.job_type == "fresher"  %}selected{% endif %}>Freshers</option>
+          <option value="fulltime" {% if request.GET.job_type == "fulltime" %}selected{% endif %}>Full Time</option>
+        </select>
+        <select name="skill">
+          <option value="">All Skills</option>
+          <option value="python"    {% if request.GET.skill == "python"    %}selected{% endif %}>Python</option>
+          <option value="php"       {% if request.GET.skill == "php"       %}selected{% endif %}>PHP</option>
+          <option value="java"      {% if request.GET.skill == "java"      %}selected{% endif %}>Java</option>
+          <option value="wordpress" {% if request.GET.skill == "wordpress" %}selected{% endif %}>WordPress</option>
+          <option value="ml"        {% if request.GET.skill == "ml"        %}selected{% endif %}>Machine Learning</option>
+        </select>
+        <button type="submit" class="mini-filter-btn">Search Jobs</button>
+      </form>
+    </div>
+
+    <!-- Filtered Jobs (same type as current job) -->
+    {% with filtered=job.job_type %}
+    <div class="sidebar-box">
+      <div class="sidebar-box-title">
+        Similar Jobs
+        <span class="count-pill">{{ similar_jobs|length }}</span>
+      </div>
+
+{% for j in similar_jobs %}
+        <a href="{% url 'job_detail' j.id %}" class="mini-job-card {% if j.id == job.id %}is-current{% endif %}">
+          <div class="mini-job-title">{{ j.title }}</div>
+          <div class="mini-job-company">{{ j.company }} · {{ j.location }}</div>
+          <div class="mini-job-footer">
+            <span class="mini-salary">₹{{ j.salary_lpa|floatformat:1 }} LPA</span>
+            {% if j.job_type == "intern" %}
+              <span class="mini-badge badge-intern">Intern</span>
+            {% elif j.job_type == "fresher" %}
+              <span class="mini-badge badge-fresher">Fresher</span>
+            {% elif j.job_type == "fulltime" %}
+              <span class="mini-badge badge-fulltime">Full Time</span>
+            {% endif %}
+          </div>
+        </a>
+      {% empty %}
+        <div class="no-results">No similar jobs found.</div>
+      {% endfor %}
+    </div>
+    {% endwith %}
+
+    <!-- Other Jobs (remaining) -->
+    <div class="sidebar-box">
+      <div class="sidebar-box-title">
+        Other Jobs
+        <span class="count-pill">{{ other_jobs|length }}</span>
+      </div>
+
+      {% for j in other_jobs %}
+        <a href="{% url 'job_detail' j.id %}" class="mini-job-card">
+          <div class="mini-job-title">{{ j.title }}</div>
+          <div class="mini-job-company">{{ j.company }} · {{ j.location }}</div>
+          <div class="mini-job-footer">
+            <span class="mini-salary">₹{{ j.salary_lpa|floatformat:1 }} LPA</span>
+            {% if j.job_type == "intern" %}
+              <span class="mini-badge badge-intern">Intern</span>
+            {% elif j.job_type == "fresher" %}
+              <span class="mini-badge badge-fresher">Fresher</span>
+            {% elif j.job_type == "fulltime" %}
+              <span class="mini-badge badge-fulltime">Full Time</span>
+            {% endif %}
+          </div>
+        </a>
+      {% empty %}
+        <div class="no-results">No other jobs right now.</div>
+      {% endfor %}
+    </div>
+
+  </div>
+  <!-- end sidebar -->
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,346 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+  html,body{background:#070d1a !important;color:#e2e8f0 !important;font-family:'Plus Jakarta Sans',sans-serif !important}
+  .container,.wrapper,main,#content,.content,[class*="container"],[class*="wrapper"]{background:transparent !important;box-shadow:none !important;border:none !important;max-width:none !important;padding:0 !important;margin:0 !important}
+  :root{--bg:#070d1a;--surface:#0e1628;--card:#121d32;--card2:#172038;--border:#1a2a45;--accent:#4f8ef7;--accent2:#0ea5e9;--teal:#2dd4bf;--gold:#fbbf24;--text:#e2e8f0;--text2:#94a3b8;--muted:#4a5f7a;--success:#34d399;--error:#ef4444;--purple:#8b5cf6}
+  @keyframes dbUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  .db-page{background:var(--bg);min-height:80vh;padding:2.5rem 3rem 5rem}
+  .db-inner{max-width:1200px;margin:0 auto}
+  .db-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;animation:dbUp .4s ease both}
+  .db-greeting{font-size:.72rem;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;font-weight:700;margin-bottom:.3rem}
+  .db-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.6rem,3vw,2.1rem);font-weight:700;letter-spacing:-.03em;color:var(--text)}
+  .db-title span{background:linear-gradient(120deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .db-header-btns{display:flex;gap:.8rem;flex-wrap:wrap}
+  .db-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:10px;font-size:.84rem;font-weight:700;font-family:'Space Grotesk',sans-serif;text-decoration:none;border:none;cursor:pointer;transition:transform .15s,box-shadow .2s}
+  .db-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .db-btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 6px 18px rgba(79,142,247,.3)}
+  .db-btn-primary:hover{transform:translateY(-2px);color:#fff}
+  .db-btn-ghost{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text2)}
+  .db-btn-ghost:hover{background:rgba(255,255,255,.09);color:var(--text)}
+  .db-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.8rem;animation:dbUp .4s .06s ease both}
+  .db-stat{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:1.4rem 1.5rem;position:relative;overflow:hidden;transition:transform .2s}
+  .db-stat:hover{transform:translateY(-3px)}
+  .db-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+  .db-stat.s1::before{background:linear-gradient(90deg,#4f8ef7,#0ea5e9)}
+  .db-stat.s2::before{background:linear-gradient(90deg,#34d399,#0ea5e9)}
+  .db-stat.s3::before{background:linear-gradient(90deg,#fbbf24,#f97316)}
+  .db-stat.s4::before{background:linear-gradient(90deg,#8b5cf6,#ec4899)}
+  .db-stat-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:.9rem}
+  .db-stat.s1 .db-stat-icon{background:rgba(79,142,247,.12)} .db-stat.s2 .db-stat-icon{background:rgba(52,211,153,.12)} .db-stat.s3 .db-stat-icon{background:rgba(251,191,36,.12)} .db-stat.s4 .db-stat-icon{background:rgba(139,92,246,.12)}
+  .db-stat-icon svg{width:18px;height:18px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .db-stat.s1 .db-stat-icon svg{stroke:var(--accent)} .db-stat.s2 .db-stat-icon svg{stroke:var(--success)} .db-stat.s3 .db-stat-icon svg{stroke:var(--gold)} .db-stat.s4 .db-stat-icon svg{stroke:var(--purple)}
+  .db-stat-num{font-family:'Space Grotesk',sans-serif;font-size:1.85rem;font-weight:700;color:var(--text);margin-bottom:.3rem}
+  .db-stat-label{font-size:.76rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.07em}
+  .db-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap;animation:dbUp .4s .1s ease both}
+  .db-tab{padding:.55rem 1.2rem;border-radius:10px;font-size:.85rem;font-weight:700;font-family:'Space Grotesk',sans-serif;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text2);transition:all .18s;text-decoration:none}
+  .db-tab.active,.db-tab:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+  .db-grid{display:grid;grid-template-columns:1fr 300px;gap:1.3rem;animation:dbUp .4s .12s ease both}
+  .db-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:1.6rem;margin-bottom:1.3rem}
+  .db-card:last-child{margin-bottom:0}
+  .db-card-title{font-family:'Space Grotesk',sans-serif;font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:1.2rem;display:flex;align-items:center;justify-content:space-between}
+  .db-card-title a{font-size:.78rem;color:var(--accent);text-decoration:none;font-weight:600}
+  .db-completion-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+  .db-completion-bar{height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+  .db-completion-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--teal));border-radius:999px}
+  .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+  .info-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem}
+  .info-box-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:.4rem}
+  .info-box-val{font-size:.9rem;color:var(--text);font-weight:600}
+  .pf-section{margin-bottom:1.8rem}
+  .pf-section-title{font-family:'Space Grotesk',sans-serif;font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:1rem;display:flex;align-items:center;gap:.7rem}
+  .pf-section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+  .pf-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .pf-field{display:flex;flex-direction:column;gap:.4rem;margin-bottom:.9rem}
+  .pf-field.full{grid-column:1 / -1}
+  .pf-label{font-size:.74rem;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+  .pf-input,.pf-select,.pf-textarea{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:.75rem 1rem;border-radius:10px;font-size:.9rem;font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;transition:border-color .2s,box-shadow .2s;outline:none}
+  .pf-input::placeholder,.pf-textarea::placeholder{color:var(--muted)}
+  .pf-input:focus,.pf-select:focus,.pf-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,142,247,.15)}
+  .pf-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a5f7a' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center}
+  .pf-select option{background:var(--surface)}
+  .pf-textarea{min-height:90px;resize:vertical;line-height:1.65}
+  .pf-resume-box{border:2px dashed var(--border);border-radius:14px;padding:1.5rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s}
+  .pf-resume-box:hover{border-color:var(--accent);background:rgba(79,142,247,.04)}
+  .pf-resume-current{display:flex;align-items:center;gap:.8rem;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);border-radius:10px;padding:.8rem 1rem;margin-top:.8rem}
+  .pf-resume-current svg{stroke:var(--success);width:18px;height:18px;fill:none;stroke-width:2;flex-shrink:0}
+  .pf-resume-fname{font-size:.84rem;color:var(--success);font-weight:600}
+  .pf-save-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;padding:.85rem 2rem;border-radius:12px;font-size:.92rem;font-family:'Space Grotesk',sans-serif;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(79,142,247,.3);transition:transform .15s;display:inline-flex;align-items:center;gap:.5rem}
+  .pf-save-btn:hover{transform:translateY(-2px)}
+  .pf-save-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.5}
+  .db-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:1.9rem;font-weight:700;color:#fff;margin:0 auto 1rem;box-shadow:0 8px 24px rgba(79,142,247,.35)}
+  .db-profile-name{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:.2rem;text-align:center}
+  .db-profile-email{font-size:.82rem;color:var(--muted);margin-bottom:1rem;text-align:center}
+  .db-badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.22);color:var(--success);padding:.28rem .8rem;border-radius:999px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:1.2rem}
+  .db-badge::before{content:'';width:6px;height:6px;background:var(--success);border-radius:50%}
+  .db-divider{height:1px;background:var(--border);margin:1rem 0}
+  .db-meta-row{display:flex;align-items:center;gap:.65rem;font-size:.83rem;color:var(--text2);margin-bottom:.6rem}
+  .db-meta-row svg{width:14px;height:14px;stroke:var(--muted);fill:none;stroke-width:2;flex-shrink:0}
+  .db-meta-row span{color:var(--text);font-weight:600}
+  .db-action-item{display:flex;align-items:center;gap:.9rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:.85rem 1rem;text-decoration:none;color:var(--text);transition:border-color .2s,transform .15s;margin-bottom:.6rem}
+  .db-action-item:last-child{margin-bottom:0}
+  .db-action-item:hover{border-color:rgba(79,142,247,.35);transform:translateX(3px);color:var(--text)}
+  .db-action-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .db-action-icon svg{width:15px;height:15px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .db-action-text strong{display:block;font-size:.86rem;font-weight:700;font-family:'Space Grotesk',sans-serif}
+  .db-action-text span{font-size:.73rem;color:var(--muted)}
+  .db-action-arrow{margin-left:auto;color:var(--muted)}
+  .db-job-item{display:flex;align-items:center;gap:1rem;padding:.9rem 0;border-bottom:1px solid rgba(255,255,255,.05);text-decoration:none}
+  .db-job-item:last-child{border-bottom:none;padding-bottom:0}
+  .db-job-item:first-child{padding-top:0}
+  .db-job-logo{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:.95rem;font-weight:700;color:#fff;flex-shrink:0}
+  .jl1{background:linear-gradient(135deg,#4f8ef7,#06b6d4)}.jl2{background:linear-gradient(135deg,#8b5cf6,#ec4899)}.jl3{background:linear-gradient(135deg,#f59e0b,#ef4444)}.jl4{background:linear-gradient(135deg,#10b981,#06b6d4)}.jl5{background:linear-gradient(135deg,#f97316,#fbbf24)}
+  .db-job-info{flex:1;min-width:0}
+  .db-job-title-t{font-family:'Space Grotesk',sans-serif;font-size:.88rem;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .db-job-co{font-size:.76rem;color:var(--muted)}
+  .tb{font-size:.63rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.2rem .6rem;border-radius:999px}
+  .tb-i{background:rgba(251,191,36,.1);color:var(--gold);border:1px solid rgba(251,191,36,.22)}
+  .tb-f{background:rgba(52,211,153,.1);color:var(--success);border:1px solid rgba(52,211,153,.22)}
+  .tb-ft{background:rgba(79,142,247,.1);color:var(--accent);border:1px solid rgba(79,142,247,.22)}
+  .db-msg{padding:.75rem 1rem;border-radius:10px;font-size:.85rem;font-weight:600;margin-bottom:.5rem}
+  .db-msg.success{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);color:var(--success)}
+  .db-msg.error{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:var(--error)}
+  @media(max-width:900px){.db-stats{grid-template-columns:repeat(2,1fr)}.db-grid{grid-template-columns:1fr}.pf-grid-2{grid-template-columns:1fr}.info-grid{grid-template-columns:1fr}.db-page{padding:1.5rem 1rem 4rem}}
+  @media(max-width:600px){.db-stats{grid-template-columns:1fr}.db-page{padding:1rem 0.5rem 3rem}.db-header{flex-direction:column;gap:1rem;text-align:center}.db-header-btns{justify-content:center}.db-avatar{width:60px;height:60px;font-size:1.6rem}.db-profile-name{font-size:1rem}.db-profile-email{font-size:.75rem;margin-bottom:.5rem}.db-meta-row{font-size:.75rem}.db-action-item{padding:.7rem .8rem}.db-job-item{padding:.7rem 0}.db-job-logo{width:32px;height:32px;font-size:.8rem}.db-job-title-t{font-size:.8rem}.db-job-co{font-size:.7rem}.tb{font-size:.55rem;padding:.15rem .5rem}.db-msg{font-size:.8rem;padding:.6rem .9rem}.pf-field{margin-bottom:.7rem}.pf-input,.pf-select,.pf-textarea{font-size:.85rem;padding:.65rem .9rem}.pf-save-btn{font-size:.85rem;padding:.75rem 1.8rem}.db-completion-bar{height:5px}.info-box{padding:.8rem}.info-box-label{font-size:.65rem}.info-box-val{font-size:.85rem}}
+</style>
+
+<div class="db-page"><div class="db-inner">
+
+  <div class="db-header">
+    <div>
+      <div class="db-greeting">👋 Good to see you</div>
+      <div class="db-title">Welcome back, <span>{{ user.first_name|default:user.username }}</span></div>
+    </div>
+    <div class="db-header-btns">
+      <a href="{% url 'job_list' %}" class="db-btn db-btn-ghost"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Browse Jobs</a>
+      {% if user.is_staff %}<a href="{% url 'post_job' %}" class="db-btn db-btn-primary"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Post a Job</a>{% endif %}
+    </div>
+  </div>
+
+  {% if messages %}<div style="margin-bottom:1rem">{% for msg in messages %}<div class="db-msg {{msg.tags}}">{{msg}}</div>{% endfor %}</div>{% endif %}
+
+  <div class="db-stats">
+    <div class="db-stat s1"><div class="db-stat-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg></div><div class="db-stat-num">{{ total_jobs }}</div><div class="db-stat-label">Live Jobs</div></div>
+    <div class="db-stat s2"><div class="db-stat-icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="db-stat-num">{{ profile.profile_completion }}%</div><div class="db-stat-label">Profile Done</div></div>
+    <div class="db-stat s3"><div class="db-stat-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="db-stat-num">500+</div><div class="db-stat-label">Companies</div></div>
+    <div class="db-stat s4"><div class="db-stat-icon"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div><div class="db-stat-num">92%</div><div class="db-stat-label">Placement Rate</div></div>
+  </div>
+
+  <div class="db-tabs">
+    <a href="#overview"     class="db-tab active" onclick="showTab('overview',this)">📊 Overview</a>
+    <a href="#edit-profile" class="db-tab"        onclick="showTab('edit-profile',this)">✏️ Edit Profile</a>
+    <a href="#resume"       class="db-tab"        onclick="showTab('resume',this)">📄 Resume</a>
+    <a href="#jobs"         class="db-tab"        onclick="showTab('jobs',this)">🔥 Latest Jobs</a>
+  </div>
+
+  <div class="db-grid">
+    <div>
+
+      <!-- OVERVIEW TAB -->
+      <div id="tab-overview">
+        <div class="db-card">
+          <div class="db-card-title">🎯 Profile Completion</div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:.5rem"><span style="font-size:.8rem;color:var(--text2);font-weight:600">{{ profile.profile_completion }}% complete</span><span style="font-family:'Space Grotesk',sans-serif;font-size:.85rem;font-weight:700;color:var(--accent)">{{ profile.profile_completion }}%</span></div>
+          <div class="db-completion-bar"><div class="db-completion-fill" style="width:{{ profile.profile_completion }}%"></div></div>
+          <p style="font-size:.83rem;color:var(--muted);margin:.8rem 0 0">{% if profile.profile_completion < 100 %}💡 <a href="#" onclick="showTab('edit-profile',null)" style="color:var(--accent);font-weight:600">Complete your profile →</a> to get noticed by recruiters.{% else %}✅ Your profile is 100% complete!{% endif %}</p>
+        </div>
+
+        <div class="db-card">
+          <div class="db-card-title">📋 Your Info Summary</div>
+          <div class="info-grid">
+            <div class="info-box"><div class="info-box-label">📱 Mobile</div><div class="info-box-val">{{ profile.mobile|default:"Not set" }}</div></div>
+            <div class="info-box"><div class="info-box-label">📍 Location</div><div class="info-box-val">{{ profile.location|default:"Not set" }}</div></div>
+            <div class="info-box"><div class="info-box-label">🎓 Qualification</div><div class="info-box-val">{{ profile.qualification|default:"Not set" }}</div></div>
+            <div class="info-box"><div class="info-box-label">💼 Experience</div><div class="info-box-val">{{ profile.experience_years|default:"0" }} years</div></div>
+            <div class="info-box"><div class="info-box-label">🔧 Skills</div><div class="info-box-val">{{ profile.preferred_skills|default:"Not set" }}</div></div>
+            <div class="info-box"><div class="info-box-label">💰 Expected Salary</div><div class="info-box-val" style="color:var(--success)">{{ profile.expected_salary|default:"Not set" }}</div></div>
+          </div>
+          {% if profile.last_company %}
+          <div class="info-box" style="margin-top:.8rem">
+            <div class="info-box-label">🏢 Last Company</div>
+            <div class="info-box-val">{{ profile.last_job_title }} @ {{ profile.last_company }}</div>
+            <div style="font-size:.78rem;color:var(--muted);margin-top:.2rem">{{ profile.last_job_from }} – {{ profile.last_job_to }}</div>
+          </div>
+          {% endif %}
+          {% if profile.resume %}
+          <div class="pf-resume-current" style="margin-top:.8rem">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <div><div class="pf-resume-fname">{{ profile.resume_filename }}</div><div style="font-size:.72rem;color:var(--muted)">Resume uploaded ✅</div></div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- EDIT PROFILE TAB -->
+      <div id="tab-edit-profile" style="display:none">
+        <div class="db-card">
+          <div class="db-card-title">✏️ Edit Profile</div>
+          <form method="POST" action="{% url 'profile' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="pf-section">
+              <div class="pf-section-title">Personal Information</div>
+              <div class="pf-grid-2">
+                <div class="pf-field"><label class="pf-label">First Name</label><input type="text" name="first_name" class="pf-input" value="{{ user.first_name }}" placeholder="John"></div>
+                <div class="pf-field"><label class="pf-label">Last Name</label><input type="text" name="last_name" class="pf-input" value="{{ user.last_name }}" placeholder="Doe"></div>
+                <div class="pf-field"><label class="pf-label">Email</label><input type="email" name="email" class="pf-input" value="{{ user.email }}" placeholder="you@email.com"></div>
+                <div class="pf-field"><label class="pf-label">Mobile Number</label><input type="tel" name="mobile" class="pf-input" value="{{ profile.mobile }}" placeholder="+91 9876543210"></div>
+                <div class="pf-field full"><label class="pf-label">Current Location</label><input type="text" name="location" class="pf-input" value="{{ profile.location }}" placeholder="e.g. Pune, Maharashtra"></div>
+                <div class="pf-field full"><label class="pf-label">Bio / About You</label><textarea name="bio" class="pf-textarea" placeholder="Tell recruiters about yourself...">{{ profile.bio }}</textarea></div>
+              </div>
+            </div>
+
+            <div class="pf-section">
+              <div class="pf-section-title">Education & Qualification</div>
+              <div class="pf-grid-2">
+                <div class="pf-field full"><label class="pf-label">Highest Qualification</label><input type="text" name="qualification" class="pf-input" value="{{ profile.qualification }}" placeholder="e.g. B.Tech Computer Science"></div>
+                <div class="pf-field"><label class="pf-label">University / College</label><input type="text" name="university" class="pf-input" value="{{ profile.university }}" placeholder="e.g. Pune University"></div>
+                <div class="pf-field"><label class="pf-label">Graduation Year</label><input type="text" name="graduation_year" class="pf-input" value="{{ profile.graduation_year }}" placeholder="e.g. 2023"></div>
+              </div>
+            </div>
+
+            <div class="pf-section">
+              <div class="pf-section-title">Job Preferences</div>
+              <div class="pf-grid-2">
+                <div class="pf-field"><label class="pf-label">Preferred Job Type</label>
+                  <select name="preferred_job_type" class="pf-select">
+                    <option value="">Select...</option>
+                    <option value="fulltime" {% if profile.preferred_job_type == "fulltime" %}selected{% endif %}>Full Time</option>
+                    <option value="intern"   {% if profile.preferred_job_type == "intern"   %}selected{% endif %}>Internship</option>
+                    <option value="fresher"  {% if profile.preferred_job_type == "fresher"  %}selected{% endif %}>Fresher</option>
+                    <option value="remote"   {% if profile.preferred_job_type == "remote"   %}selected{% endif %}>Remote</option>
+                    <option value="hybrid"   {% if profile.preferred_job_type == "hybrid"   %}selected{% endif %}>Hybrid</option>
+                  </select>
+                </div>
+                <div class="pf-field"><label class="pf-label">Expected Salary</label><input type="text" name="expected_salary" class="pf-input" value="{{ profile.expected_salary }}" placeholder="e.g. 8-12 LPA"></div>
+                <div class="pf-field full"><label class="pf-label">Preferred Skills</label><input type="text" name="preferred_skills" class="pf-input" value="{{ profile.preferred_skills }}" placeholder="e.g. Python, Django, React, SQL"></div>
+                <div class="pf-field full"><label class="pf-label">Preferred Job Location</label><input type="text" name="preferred_location" class="pf-input" value="{{ profile.preferred_location }}" placeholder="e.g. Pune, Mumbai or Remote"></div>
+              </div>
+            </div>
+
+            <div class="pf-section">
+              <div class="pf-section-title">Work Experience (Last Company)</div>
+              <div class="pf-grid-2">
+                <div class="pf-field"><label class="pf-label">Company Name</label><input type="text" name="last_company" class="pf-input" value="{{ profile.last_company }}" placeholder="e.g. Infosys"></div>
+                <div class="pf-field"><label class="pf-label">Job Title</label><input type="text" name="last_job_title" class="pf-input" value="{{ profile.last_job_title }}" placeholder="e.g. Software Engineer"></div>
+                <div class="pf-field"><label class="pf-label">From</label><input type="text" name="last_job_from" class="pf-input" value="{{ profile.last_job_from }}" placeholder="e.g. Jan 2022"></div>
+                <div class="pf-field"><label class="pf-label">To</label><input type="text" name="last_job_to" class="pf-input" value="{{ profile.last_job_to }}" placeholder="e.g. Dec 2023 or Present"></div>
+                <div class="pf-field full"><label class="pf-label">Total Experience (years)</label><input type="text" name="experience_years" class="pf-input" value="{{ profile.experience_years }}" placeholder="e.g. 2.5"></div>
+                <div class="pf-field full"><label class="pf-label">Responsibilities / Description</label><textarea name="last_job_desc" class="pf-textarea" placeholder="Describe your role...">{{ profile.last_job_desc }}</textarea></div>
+              </div>
+            </div>
+
+            <button type="submit" class="pf-save-btn"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Save Profile</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- RESUME TAB -->
+      <div id="tab-resume" style="display:none">
+        <div class="db-card">
+          <div class="db-card-title">📄 Resume Upload</div>
+          <form method="POST" action="{% url 'profile' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="first_name" value="{{ user.first_name }}">
+            <input type="hidden" name="last_name" value="{{ user.last_name }}">
+            <input type="hidden" name="email" value="{{ user.email }}">
+            <input type="hidden" name="mobile" value="{{ profile.mobile }}">
+            <input type="hidden" name="location" value="{{ profile.location }}">
+            <input type="hidden" name="bio" value="{{ profile.bio }}">
+            <input type="hidden" name="qualification" value="{{ profile.qualification }}">
+            <input type="hidden" name="university" value="{{ profile.university }}">
+            <input type="hidden" name="graduation_year" value="{{ profile.graduation_year }}">
+            <input type="hidden" name="preferred_job_type" value="{{ profile.preferred_job_type }}">
+            <input type="hidden" name="preferred_skills" value="{{ profile.preferred_skills }}">
+            <input type="hidden" name="preferred_location" value="{{ profile.preferred_location }}">
+            <input type="hidden" name="expected_salary" value="{{ profile.expected_salary }}">
+            <input type="hidden" name="last_company" value="{{ profile.last_company }}">
+            <input type="hidden" name="last_job_title" value="{{ profile.last_job_title }}">
+            <input type="hidden" name="last_job_from" value="{{ profile.last_job_from }}">
+            <input type="hidden" name="last_job_to" value="{{ profile.last_job_to }}">
+            <input type="hidden" name="experience_years" value="{{ profile.experience_years }}">
+            <input type="hidden" name="last_job_desc" value="{{ profile.last_job_desc }}">
+
+            <input type="file" name="resume" id="resume-input" accept=".pdf,.doc,.docx" style="display:none" onchange="updateResumeLabel(this)">
+            <div class="pf-resume-box" onclick="document.getElementById('resume-input').click()">
+              <div style="font-size:2.5rem;margin-bottom:.6rem">📄</div>
+              <div id="resume-label" style="font-size:.9rem;color:var(--text2);font-weight:600;margin-bottom:.25rem">Click to upload your resume</div>
+              <div style="font-size:.76rem;color:var(--muted)">PDF, DOC or DOCX · Max 5MB</div>
+            </div>
+            {% if profile.resume %}
+            <div class="pf-resume-current">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <div><div class="pf-resume-fname">{{ profile.resume_filename }}</div><div style="font-size:.72rem;color:var(--muted)">Currently uploaded — upload new to replace</div></div>
+            </div>
+            {% endif %}
+            <div style="margin-top:1.2rem">
+              <button type="submit" class="pf-save-btn"><svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>Upload Resume</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- JOBS TAB -->
+      <div id="tab-jobs" style="display:none">
+        <div class="db-card">
+          <div class="db-card-title">🔥 Latest Jobs <a href="{% url 'job_list' %}">View all →</a></div>
+          {% for job in recent_jobs %}
+          <a href="{% url 'job_detail' job.id %}" class="db-job-item" style="text-decoration:none">
+            <div class="db-job-logo {% cycle 'jl1' 'jl2' 'jl3' 'jl4' 'jl5' %}">{{ job.company|first|upper }}</div>
+            <div class="db-job-info"><div class="db-job-title-t">{{ job.title }}</div><div class="db-job-co">{{ job.company }} · {{ job.location }}</div></div>
+            <div style="text-align:right;flex-shrink:0">
+              {% if job.job_type == "intern" %}<span class="tb tb-i">Intern</span>
+              {% elif job.job_type == "fresher" %}<span class="tb tb-f">Fresher</span>
+              {% else %}<span class="tb tb-ft">Full Time</span>{% endif %}
+            </div>
+          </a>
+          {% empty %}<p style="color:var(--muted);font-size:.88rem">No jobs yet. <a href="{% url 'job_list' %}" style="color:var(--accent)">Browse all →</a></p>{% endfor %}
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <div>
+      <div class="db-card" style="text-align:center;padding:1.8rem 1.4rem">
+        <div class="db-avatar">{{ user.username|first|upper }}</div>
+        <div class="db-profile-name">{{ user.get_full_name|default:user.username }}</div>
+        <div class="db-profile-email">{{ user.email|default:"No email set" }}</div>
+        <div style="display:flex;justify-content:center;margin-bottom:1rem"><span class="db-badge">Active Member</span></div>
+        <div class="db-divider"></div>
+        <div style="text-align:left">
+          <div class="db-meta-row"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.22 1.18 2 2 0 012.22 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.66-.66a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>{{ profile.mobile|default:"Not set" }}</div>
+          <div class="db-meta-row"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>{{ profile.location|default:"Not set" }}</div>
+          <div class="db-meta-row"><svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg><span>{{ profile.qualification|default:"Not set" }}</span></div>
+          <div class="db-meta-row"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>{{ profile.experience_years|default:"0" }} yrs exp</div>
+          <div class="db-meta-row"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>{{ profile.expected_salary|default:"Not set" }}</span></div>
+          <div class="db-meta-row"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Joined {{ user.date_joined|date:"M Y" }}</div>
+        </div>
+      </div>
+
+      <div class="db-card">
+        <div class="db-card-title">⚡ Quick Actions</div>
+        <a href="#" onclick="showTab('edit-profile',null)" class="db-action-item"><div class="db-action-icon" style="background:rgba(79,142,247,.12)"><svg viewBox="0 0 24 24" style="stroke:#4f8ef7"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div><div class="db-action-text"><strong>Edit Profile</strong><span>Update your info</span></div><span class="db-action-arrow">→</span></a>
+        <a href="#" onclick="showTab('resume',null)" class="db-action-item"><div class="db-action-icon" style="background:rgba(52,211,153,.12)"><svg viewBox="0 0 24 24" style="stroke:#34d399"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="db-action-text"><strong>Upload Resume</strong><span>PDF, DOC or DOCX</span></div><span class="db-action-arrow">→</span></a>
+        <a href="{% url 'job_list' %}" class="db-action-item"><div class="db-action-icon" style="background:rgba(251,191,36,.12)"><svg viewBox="0 0 24 24" style="stroke:#fbbf24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div><div class="db-action-text"><strong>Browse Jobs</strong><span>Find your next role</span></div><span class="db-action-arrow">→</span></a>
+        {% if user.is_staff %}<a href="{% url 'post_job' %}" class="db-action-item"><div class="db-action-icon" style="background:rgba(139,92,246,.12)"><svg viewBox="0 0 24 24" style="stroke:#8b5cf6"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><div class="db-action-text"><strong>Post a Job</strong><span>Admin only</span></div><span class="db-action-arrow">→</span></a>{% endif %}
+        <a href="{% url 'logout' %}" class="db-action-item"><div class="db-action-icon" style="background:rgba(239,68,68,.1)"><svg viewBox="0 0 24 24" style="stroke:#ef4444"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div><div class="db-action-text"><strong>Sign Out</strong><span>Log out</span></div><span class="db-action-arrow">→</span></a>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<script>
+function showTab(name,el){
+  ['overview','edit-profile','resume','jobs'].forEach(t=>document.getElementById('tab-'+t).style.display='none');
+  document.getElementById('tab-'+name).style.display='block';
+  document.querySelectorAll('.db-tab').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+}
+function updateResumeLabel(input){
+  if(input.files[0])document.getElementById('resume-label').textContent='✅ '+input.files[0].name;
+}
+</script>
+{% endblock %}

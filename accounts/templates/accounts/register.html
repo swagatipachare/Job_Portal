@@ -1,0 +1,469 @@
+{% extends 'base.html' %}
+{% block title %}Register — JobPortal{% endblock %}
+
+{% block full_width %}
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+  html, body {
+    background: #070d1a !important;
+    color: #e2e8f0 !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .jp-page-container { display: none !important; }
+
+  .rp-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: calc(100vh - 66px);
+  }
+
+  .rp-left {
+    background: #070d1a;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2.5rem 4rem;
+    overflow-y: auto;
+  }
+
+  .rp-form-box { width:100%;max-width:440px;animation:rpUp .5s ease both; }
+  @keyframes rpUp { from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)} }
+
+  .rp-brand { display:inline-flex;align-items:center;gap:.7rem;text-decoration:none;margin-bottom:1.8rem; }
+  .rp-brand-icon { width:40px;height:40px;background:linear-gradient(135deg,#4f8ef7,#0ea5e9);border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(79,142,247,.4); }
+  .rp-brand-name { font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;color:#e2e8f0;letter-spacing:-.02em; }
+
+  .rp-eyebrow { font-size:.72rem;color:#0ea5e9;text-transform:uppercase;letter-spacing:.12em;font-weight:700;margin-bottom:.45rem; }
+  .rp-title { font-family:'Space Grotesk',sans-serif;font-size:1.85rem;font-weight:700;letter-spacing:-.03em;color:#e2e8f0;margin-bottom:.4rem;line-height:1.15; }
+  .rp-sub { font-size:.88rem;color:#64748b;margin-bottom:1.6rem; }
+  .rp-sub a { color:#4f8ef7;font-weight:600;text-decoration:none; }
+  .rp-sub a:hover { color:#0ea5e9; }
+
+  .rp-error { background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);border-radius:12px;padding:.85rem 1rem;margin-bottom:1.3rem;font-size:.86rem;color:#fca5a5;display:flex;align-items:center;gap:.6rem; }
+  .rp-error svg { width:15px;height:15px;stroke:#ef4444;fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0; }
+
+  .rp-role-label { font-size:.7rem;color:#64748b;text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:.5rem;display:block; }
+  .rp-roles { display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:1.3rem; }
+  .rp-role { position:relative; }
+  .rp-role input[type="radio"] { position:absolute;opacity:0;width:0;height:0; }
+  .rp-role-card {
+    display:flex;flex-direction:column;align-items:center;gap:.35rem;
+    background:#121d32;border:1.5px solid #1a2a45;border-radius:14px;
+    padding:.9rem .8rem;cursor:pointer;
+    transition:border-color .2s,background .2s,transform .15s;
+  }
+  .rp-role-card svg { width:26px;height:26px;stroke:#4a5f7a;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round; }
+  .rp-role-card .rc-name { font-family:'Space Grotesk',sans-serif;font-size:.82rem;font-weight:700;color:#e2e8f0; }
+  .rp-role-card .rc-desc { font-size:.72rem;color:#64748b; }
+  .rp-role input:checked + .rp-role-card { border-color:#4f8ef7;background:rgba(79,142,247,.08);transform:translateY(-2px); }
+  .rp-role input:checked + .rp-role-card svg { stroke:#4f8ef7; }
+  .rp-role input:checked + .rp-role-card .rc-name { color:#4f8ef7; }
+
+  .rp-grid2 { display:grid;grid-template-columns:1fr 1fr;gap:.9rem; }
+  .rp-full { grid-column:1/-1; }
+
+  .rp-field { margin-bottom:.95rem; }
+  .rp-label { display:block;font-size:.7rem;color:#64748b;text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:.38rem; }
+
+  .rp-input-row {
+    display: flex;
+    align-items: stretch;
+    background: #121d32;
+    border: 1px solid #1a2a45;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .rp-input-row:focus-within {
+    border-color: #4f8ef7;
+    box-shadow: 0 0 0 3px rgba(79,142,247,.18);
+  }
+
+  .rp-icon {
+    width: 44px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid #1a2a45;
+  }
+  .rp-icon svg {
+    width: 15px; height: 15px;
+    stroke: #4a5f7a; fill: none;
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  .rp-input {
+    flex: 1;
+    min-width: 0;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    color: #e2e8f0 !important;
+    -webkit-text-fill-color: #e2e8f0 !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-size: .91rem !important;
+    font-weight: 400;
+    padding: .82rem .85rem !important;
+    margin: 0 !important;
+  }
+  .rp-input::placeholder { color: #4a5f7a !important; opacity: 1 !important; }
+  .rp-input:-webkit-autofill,
+  .rp-input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px #121d32 inset !important;
+    -webkit-text-fill-color: #e2e8f0 !important;
+  }
+
+  .rp-eye {
+    width:42px;flex-shrink:0;
+    background:none;border:none;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    border-left:1px solid #1a2a45;transition:background .15s;
+  }
+  .rp-eye:hover { background:rgba(255,255,255,.04); }
+  .rp-eye svg { width:15px;height:15px;stroke:#4a5f7a;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none; }
+  .rp-eye:hover svg { stroke:#94a3b8; }
+
+  .rp-strength-bar { height:3px;background:#1a2a45;border-radius:999px;margin-top:.45rem;overflow:hidden; }
+  .rp-strength-fill { height:100%;border-radius:999px;transition:width .3s,background .3s;width:0%; }
+  .rp-strength-text { font-size:.7rem;color:#4a5f7a;margin-top:.3rem;min-height:.9em; }
+
+  /* ── CHECKBOX FIX ── */
+  .rp-terms {
+    display: flex;
+    align-items: flex-start;
+    gap: .65rem;
+    margin: 1.2rem 0 1.4rem;
+    font-size: .83rem;
+    color: #64748b;
+    line-height: 1.5;
+    cursor: pointer;
+  }
+
+  /* Hide native checkbox completely */
+  .rp-terms input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  /* Custom checkbox box */
+  .rp-checkbox-custom {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border: 2px solid #1a2a45;
+    border-radius: 5px;
+    background: #121d32;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    transition: border-color .2s, background .2s;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .rp-checkbox-custom svg {
+    width: 11px;
+    height: 11px;
+    stroke: #fff;
+    fill: none;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0;
+    transition: opacity .15s;
+  }
+
+  /* When checkbox is checked, style the custom box */
+  .rp-terms input[type="checkbox"]:checked ~ .rp-checkbox-custom {
+    background: #4f8ef7;
+    border-color: #4f8ef7;
+  }
+
+  .rp-terms input[type="checkbox"]:checked ~ .rp-checkbox-custom svg {
+    opacity: 1;
+  }
+
+  .rp-terms-text {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .rp-terms a { color:#4f8ef7;text-decoration:none; }
+  .rp-terms a:hover { color:#0ea5e9; }
+
+  .rp-btn {
+    width:100%;
+    background:linear-gradient(135deg,#4f8ef7,#0ea5e9);
+    color:#fff;border:none;padding:.95rem;border-radius:12px;
+    font-family:'Space Grotesk',sans-serif;font-size:.97rem;font-weight:700;letter-spacing:.015em;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;
+    box-shadow:0 8px 24px rgba(79,142,247,.32);
+    transition:transform .15s,box-shadow .2s;
+    margin-bottom:1.2rem;
+  }
+  .rp-btn:hover { transform:translateY(-2px);box-shadow:0 14px 36px rgba(79,142,247,.45); }
+  .rp-btn:active { transform:translateY(0); }
+  .rp-btn svg { width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round; }
+
+  .rp-login-row { text-align:center;font-size:.88rem;color:#64748b; }
+  .rp-login-row a { color:#4f8ef7;font-weight:600;text-decoration:none;font-family:'Space Grotesk',sans-serif; }
+  .rp-login-row a:hover { color:#0ea5e9; }
+
+  /* RIGHT DECO */
+  .rp-right {
+    background:#0e1628;border-left:1px solid #1a2a45;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    padding:3rem;position:relative;overflow:hidden;
+  }
+  .rp-blob { position:absolute;border-radius:50%;filter:blur(90px);opacity:.14;pointer-events:none; }
+  .rp-blob-1 { width:400px;height:400px;background:#0ea5e9;top:-100px;right:-100px;animation:rpFloatA 9s ease-in-out infinite; }
+  .rp-blob-2 { width:300px;height:300px;background:#4f8ef7;bottom:-80px;left:-60px;animation:rpFloatB 7s ease-in-out infinite; }
+  @keyframes rpFloatA { 0%,100%{transform:translateY(0)}50%{transform:translateY(-25px)} }
+  @keyframes rpFloatB { 0%,100%{transform:translateY(0)}50%{transform:translateY(20px)} }
+
+  .rp-right-grid { position:absolute;inset:0;background-image:linear-gradient(rgba(14,165,233,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(14,165,233,.05) 1px,transparent 1px);background-size:48px 48px;animation:rpGrid 18s linear infinite reverse; }
+  @keyframes rpGrid { 0%{transform:translateY(0)}100%{transform:translateY(48px)} }
+
+  .rp-right-inner { position:relative;text-align:center;max-width:380px; }
+  .rp-right-heading { font-family:'Space Grotesk',sans-serif;font-size:clamp(1.6rem,3vw,2.3rem);font-weight:700;line-height:1.15;letter-spacing:-.03em;margin-bottom:.9rem;color:#e2e8f0; }
+  .rp-right-heading span { background:linear-gradient(135deg,#0ea5e9,#4f8ef7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+  .rp-right-sub { color:#64748b;font-size:.9rem;line-height:1.7;margin-bottom:2.2rem; }
+
+  .rp-steps { display:flex;flex-direction:column;gap:1rem;text-align:left; }
+  .rp-step { display:flex;align-items:flex-start;gap:.9rem; }
+  .rp-step-num { width:30px;height:30px;flex-shrink:0;background:linear-gradient(135deg,#4f8ef7,#0ea5e9);border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:.82rem;font-weight:800;color:#fff;box-shadow:0 4px 14px rgba(79,142,247,.3); }
+  .rp-step-text strong { display:block;font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:700;color:#e2e8f0;margin-bottom:.12rem; }
+  .rp-step-text span { font-size:.78rem;color:#64748b; }
+
+  .rp-testimonial { margin-top:2.2rem;background:rgba(79,142,247,.07);border:1px solid rgba(79,142,247,.15);border-radius:16px;padding:1.15rem 1.3rem;text-align:left; }
+  .rp-testi-text { font-size:.84rem;color:#e2e8f0;font-style:italic;font-weight:300;line-height:1.6;margin-bottom:.75rem; }
+  .rp-testi-author { display:flex;align-items:center;gap:.6rem; }
+  .rp-testi-avatar { width:30px;height:30px;background:linear-gradient(135deg,#f59e0b,#f97316);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:.82rem;font-weight:800;color:#fff; }
+  .rp-testi-info strong { display:block;font-size:.8rem;font-family:'Space Grotesk',sans-serif;font-weight:700;color:#e2e8f0; }
+  .rp-testi-info span { font-size:.73rem;color:#64748b; }
+
+  @media (max-width:860px) {
+    .rp-wrap { grid-template-columns:1fr; }
+    .rp-right { display:none; }
+    .rp-left { padding:2.5rem 1.5rem; }
+  }
+  @media (max-width:480px) {
+    .rp-grid2 { grid-template-columns:1fr; }
+  }
+</style>
+
+<div class="rp-wrap">
+
+  <div class="rp-left">
+    <div class="rp-form-box">
+
+      <a href="{% url 'home' %}" class="rp-brand">
+        <div class="rp-brand-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+        </div>
+        <span class="rp-brand-name">JobPortal</span>
+      </a>
+
+      <div class="rp-eyebrow">Get started for free</div>
+      <h1 class="rp-title">Create your account</h1>
+      <p class="rp-sub">Already have an account? <a href="{% url 'login' %}">Sign in →</a></p>
+
+      {% if messages %}{% for message in messages %}
+        <div class="rp-error"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>{{ message }}</div>
+      {% endfor %}{% endif %}
+      {% if form.errors %}
+        <div class="rp-error"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Please fix the errors below and try again.</div>
+      {% endif %}
+
+      <form method="POST">{% csrf_token %}
+
+        <!-- Role -->
+        <div style="margin-bottom:1.3rem;">
+          <label class="rp-role-label">I am a...</label>
+          <div class="rp-roles">
+            <div class="rp-role">
+              <input type="radio" name="role" id="r-seeker" value="jobseeker" checked>
+              <label for="r-seeker" class="rp-role-card">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                <span class="rc-name">Job Seeker</span>
+                <span class="rc-desc">Looking for work</span>
+              </label>
+            </div>
+            <div class="rp-role">
+              <input type="radio" name="role" id="r-employer" value="employer">
+              <label for="r-employer" class="rp-role-card">
+                <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+                <span class="rc-name">Employer</span>
+                <span class="rc-desc">Hiring talent</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- First + Last name -->
+        <div class="rp-grid2" style="margin-bottom:.95rem;">
+          <div class="rp-field">
+            <label class="rp-label">First Name</label>
+            <div class="rp-input-row">
+              <div class="rp-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+              <input type="text" name="first_name" class="rp-input" placeholder="John" autocomplete="given-name">
+            </div>
+          </div>
+          <div class="rp-field">
+            <label class="rp-label">Last Name</label>
+            <div class="rp-input-row">
+              <div class="rp-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+              <input type="text" name="last_name" class="rp-input" placeholder="Doe" autocomplete="family-name">
+            </div>
+          </div>
+        </div>
+
+        <!-- Username -->
+        <div class="rp-field rp-full">
+          <label class="rp-label">Username</label>
+          <div class="rp-input-row">
+            <div class="rp-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <input type="text" name="username" class="rp-input" placeholder="Choose a username"
+              value="{{ request.POST.username }}" autocomplete="username" required>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="rp-field rp-full">
+          <label class="rp-label">Email Address</label>
+          <div class="rp-input-row">
+            <div class="rp-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+            <input type="email" name="email" class="rp-input" placeholder="john@example.com"
+              value="{{ request.POST.email }}" autocomplete="email">
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="rp-field rp-full">
+          <label class="rp-label">Password</label>
+          <div class="rp-input-row">
+            <div class="rp-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+            <input type="password" name="password" id="rp-pw1" class="rp-input"
+              placeholder="Create a strong password"
+              autocomplete="new-password"
+              oninput="rpStrength(this.value)" required>
+            <button type="button" class="rp-eye" onclick="rpToggle('rp-pw1',this)" aria-label="Toggle">
+              <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="rp-strength-bar"><div class="rp-strength-fill" id="rp-sf"></div></div>
+          <div class="rp-strength-text" id="rp-st"></div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="rp-field rp-full">
+          <label class="rp-label">Confirm Password</label>
+          <div class="rp-input-row">
+            <div class="rp-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+            <input type="password" name="password_confirm" id="rp-pw2" class="rp-input"
+              placeholder="Repeat your password"
+              autocomplete="new-password" required>
+            <button type="button" class="rp-eye" onclick="rpToggle('rp-pw2',this)" aria-label="Toggle">
+              <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Terms — FIXED CHECKBOX -->
+        <label class="rp-terms" for="rp-terms-cb">
+          <input type="checkbox" id="rp-terms-cb" name="terms" required>
+          <span class="rp-checkbox-custom">
+            <svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9 10.5,3"/></svg>
+          </span>
+          <span class="rp-terms-text">
+            I agree to the <a href="#" onclick="event.stopPropagation()">Terms of Service</a> and
+            <a href="#" onclick="event.stopPropagation()">Privacy Policy</a>.
+            I confirm all information provided is accurate.
+          </span>
+        </label>
+
+        <button type="submit" class="rp-btn">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Create My Account
+        </button>
+
+        <div class="rp-login-row">Already registered? <a href="{% url 'login' %}">Sign in to your account</a></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- RIGHT: DECO -->
+  <div class="rp-right">
+    <div class="rp-right-grid"></div>
+    <div class="rp-blob rp-blob-1"></div>
+    <div class="rp-blob rp-blob-2"></div>
+    <div class="rp-right-inner">
+      <h2 class="rp-right-heading">Join <span>50,000+</span> Professionals Already Hired</h2>
+      <p class="rp-right-sub">From freshers to senior engineers — JobPortal connects the right talent with the right companies every day.</p>
+      <div class="rp-steps">
+        <div class="rp-step"><div class="rp-step-num">1</div><div class="rp-step-text"><strong>Create your free profile</strong><span>Takes less than 2 minutes to set up</span></div></div>
+        <div class="rp-step"><div class="rp-step-num">2</div><div class="rp-step-text"><strong>Browse matching jobs</strong><span>Filter by role, skill, location & salary</span></div></div>
+        <div class="rp-step"><div class="rp-step-num">3</div><div class="rp-step-text"><strong>Apply with one click</strong><span>Your profile does the talking</span></div></div>
+        <div class="rp-step"><div class="rp-step-num">4</div><div class="rp-step-text"><strong>Get hired! 🎉</strong><span>Avg. 3 interviews within first week</span></div></div>
+      </div>
+      <div class="rp-testimonial">
+        <div class="rp-testi-text">"I applied to 5 jobs on JobPortal and got 3 interview calls within a week. Landed my dream role at a top startup!"</div>
+        <div class="rp-testi-author">
+          <div class="rp-testi-avatar">R</div>
+          <div class="rp-testi-info"><strong>Swagati Pachare</strong><span>Software Engineer · Hired via JobPortal</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function rpToggle(id, btn) {
+    const f = document.getElementById(id);
+    const s = btn.querySelector('svg');
+    if (f.type === 'password') {
+      f.type = 'text';
+      s.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+    } else {
+      f.type = 'password';
+      s.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+    }
+  }
+
+  function rpStrength(v) {
+    const fill = document.getElementById('rp-sf');
+    const text = document.getElementById('rp-st');
+    let s = 0;
+    if (v.length >= 8)          s++;
+    if (/[A-Z]/.test(v))        s++;
+    if (/[0-9]/.test(v))        s++;
+    if (/[^A-Za-z0-9]/.test(v)) s++;
+    const L = [
+      {p:'0%',   c:'transparent', l:''},
+      {p:'25%',  c:'#ef4444',     l:'Weak'},
+      {p:'50%',  c:'#f59e0b',     l:'Fair'},
+      {p:'75%',  c:'#4f8ef7',     l:'Good'},
+      {p:'100%', c:'#34d399',     l:'Strong'},
+    ];
+    const lvl = v.length === 0 ? L[0] : L[s] || L[1];
+    fill.style.width = lvl.p;
+    fill.style.background = lvl.c;
+    text.textContent = lvl.l;
+    text.style.color = lvl.c;
+  }
+</script>
+{% endblock %}

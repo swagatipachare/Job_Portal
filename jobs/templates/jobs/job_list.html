@@ -1,0 +1,590 @@
+{% extends 'base.html' %}
+
+{% block title %}Browse Jobs — JobPortal{% endblock %}
+
+{% block content %}
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg:      #070d1a;
+    --surface: #0e1628;
+    --card:    #121d32;
+    --card2:   #172038;
+    --border:  #1a2a45;
+    --accent:  #4f8ef7;
+    --accent2: #0ea5e9;
+    --teal:    #2dd4bf;
+    --gold:    #fbbf24;
+    --text:    #e2e8f0;
+    --text2:   #94a3b8;
+    --muted:   #4a5f7a;
+    --success: #34d399;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--bg) !important;
+    color: var(--text) !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+  }
+
+  .container, .wrapper, .jp-page-container {
+    background: transparent !important;
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  /* ── PAGE ── */
+  .jl-page {
+    background: var(--bg);
+    min-height: 100vh;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  .jl-container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ── TOP HEADER ── */
+  .jl-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    animation: jlFadeUp .5s ease both;
+  }
+
+  .jl-header-left {}
+
+  .jl-eyebrow {
+    font-size: .75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent2);
+    margin-bottom: .5rem;
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+  }
+
+  .jl-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: -.03em;
+    color: var(--text);
+    line-height: 1.15;
+  }
+
+  .jl-title span {
+    background: linear-gradient(120deg, var(--accent), var(--teal));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .jl-count-pill {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    font-size: .82rem;
+    font-weight: 600;
+    padding: .4rem 1rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .jl-count-pill .num {
+    color: var(--accent);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: .9rem;
+  }
+
+  /* post job button */
+  .jl-post-btn {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    text-decoration: none;
+    font-size: .88rem;
+    font-weight: 700;
+    padding: .6rem 1.3rem;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    transition: transform .15s, box-shadow .2s;
+    box-shadow: 0 6px 18px rgba(79,142,247,.3);
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  .jl-post-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(79,142,247,.45);
+    color: #fff;
+  }
+
+  /* ── FILTER BAR ── */
+  .jl-filter-bar {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 1.4rem 1.6rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 16px 48px rgba(0,0,0,.4);
+    animation: jlFadeUp .5s .06s ease both;
+  }
+
+  .jl-filter-bar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--teal));
+  }
+
+  .jl-fg {
+    display: flex;
+    flex-direction: column;
+    gap: .38rem;
+    flex: 1;
+    min-width: 160px;
+  }
+
+  .jl-fg label {
+    font-size: .72rem;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    font-weight: 700;
+  }
+
+  .jl-select {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: .72rem 2.4rem .72rem .9rem;
+    border-radius: 10px;
+    font-size: .88rem;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 500;
+    appearance: none;
+    cursor: pointer;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a5f7a' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right .85rem center;
+    width: 100%;
+  }
+
+  .jl-select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(79,142,247,.15);
+  }
+
+  .jl-select option { background: var(--surface); color: var(--text); }
+
+  .jl-filter-btn {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    border: none;
+    padding: .72rem 1.6rem;
+    border-radius: 10px;
+    font-size: .88rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    transition: transform .15s, box-shadow .2s;
+    box-shadow: 0 6px 20px rgba(79,142,247,.3);
+    flex-shrink: 0;
+  }
+
+  .jl-filter-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(79,142,247,.45); }
+  .jl-filter-btn:active { transform: translateY(0); }
+
+  /* clear filter link */
+  .jl-clear {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    color: var(--muted);
+    font-size: .8rem;
+    font-weight: 600;
+    text-decoration: none;
+    padding: .72rem .9rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    transition: color .18s, background .18s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .jl-clear:hover { color: var(--text2); background: rgba(255,255,255,.04); }
+
+  /* ── GRID ── */
+  .jl-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 1.3rem;
+    animation: jlFadeUp .5s .12s ease both;
+  }
+
+  /* ── JOB CARD ── */
+  .jl-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 1.6rem;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    transition: transform .22s cubic-bezier(.34,1.56,.64,1), border-color .22s, box-shadow .22s;
+  }
+
+  .jl-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 55% 35% at 20% 0%, rgba(79,142,247,.07), transparent 65%);
+    opacity: 0;
+    transition: opacity .3s;
+    pointer-events: none;
+  }
+
+  .jl-card:hover {
+    transform: translateY(-6px) scale(1.01);
+    border-color: rgba(79,142,247,.45);
+    box-shadow: 0 24px 56px rgba(0,0,0,.55), 0 0 0 1px rgba(79,142,247,.18);
+  }
+
+  .jl-card:hover::before { opacity: 1; }
+
+  /* stagger */
+  .jl-card:nth-child(1){animation-delay:.04s} .jl-card:nth-child(2){animation-delay:.08s}
+  .jl-card:nth-child(3){animation-delay:.12s} .jl-card:nth-child(4){animation-delay:.16s}
+  .jl-card:nth-child(5){animation-delay:.20s} .jl-card:nth-child(6){animation-delay:.24s}
+  .jl-card:nth-child(7){animation-delay:.28s} .jl-card:nth-child(8){animation-delay:.32s}
+
+  .jl-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.1rem;
+  }
+
+  .jl-logo {
+    width: 46px; height: 46px;
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .lv1{background:linear-gradient(135deg,#4f8ef7,#06b6d4)}
+  .lv2{background:linear-gradient(135deg,#8b5cf6,#ec4899)}
+  .lv3{background:linear-gradient(135deg,#f59e0b,#ef4444)}
+  .lv4{background:linear-gradient(135deg,#10b981,#06b6d4)}
+  .lv5{background:linear-gradient(135deg,#f97316,#fbbf24)}
+
+  .jl-type-badge {
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: .28rem .82rem;
+    border-radius: 999px;
+  }
+
+  .tb-intern   {background:rgba(251,191,36,.1);  color:var(--gold);    border:1px solid rgba(251,191,36,.22)}
+  .tb-fresher  {background:rgba(52,211,153,.1);  color:var(--success); border:1px solid rgba(52,211,153,.22)}
+  .tb-fulltime {background:rgba(79,142,247,.1);  color:var(--accent);  border:1px solid rgba(79,142,247,.22)}
+  .tb-default  {background:rgba(74,95,122,.12);  color:var(--text2);   border:1px solid rgba(74,95,122,.25)}
+
+  .jl-card-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.08rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: .35rem;
+    line-height: 1.3;
+    letter-spacing: -.015em;
+    transition: color .18s;
+  }
+
+  .jl-card:hover .jl-card-title { color: var(--accent); }
+
+  .jl-company-row {
+    font-size: .86rem;
+    color: var(--text2);
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    margin-bottom: 1.15rem;
+    font-weight: 500;
+  }
+
+  .jl-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin-bottom: 1.3rem;
+    flex: 1;
+  }
+
+  .jl-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    padding: .28rem .75rem;
+    border-radius: 7px;
+    font-size: .76rem;
+    color: var(--text2);
+    font-weight: 500;
+  }
+
+  .jl-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,.06);
+    margin-top: auto;
+  }
+
+  .jl-salary {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--success);
+    display: flex;
+    align-items: baseline;
+    gap: .2rem;
+  }
+
+  .jl-salary small {
+    font-size: .7rem;
+    color: var(--muted);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 400;
+  }
+
+  .jl-view-btn {
+    background: rgba(79,142,247,.1);
+    color: var(--accent);
+    border: 1px solid rgba(79,142,247,.22);
+    padding: .42rem 1.05rem;
+    border-radius: 8px;
+    font-size: .78rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background .18s, color .18s;
+    white-space: nowrap;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  .jl-view-btn:hover {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  /* ── EMPTY STATE ── */
+  .jl-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .jl-empty-icon {
+    width: 76px; height: 76px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+  }
+
+  .jl-empty h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text2);
+  }
+
+  .jl-empty p { font-size: .88rem; color: var(--muted); max-width: 300px; margin: 0; }
+
+  /* ── ANIMATION ── */
+  @keyframes jlFadeUp {
+    from { opacity:0; transform: translateY(20px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 700px) {
+    .jl-filter-bar { flex-direction: column; }
+    .jl-filter-btn, .jl-clear { width: 100%; justify-content: center; }
+    .jl-header { flex-direction: column; align-items: flex-start; }
+  }
+
+  @media (max-width: 480px) {
+    .jl-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="jl-page">
+  <div class="jl-container">
+
+    <!-- Header -->
+    <div class="jl-header">
+      <div class="jl-header-left">
+        <div class="jl-eyebrow">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+          Job Listings
+        </div>
+        <h1 class="jl-title">Browse <span>Available</span> Jobs</h1>
+      </div>
+
+      <div style="display:flex; gap:.8rem; align-items:center; flex-wrap:wrap;">
+        <div class="jl-count-pill">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          <span class="num">{{ jobs|length }}</span> job{{ jobs|length|pluralize }} available
+        </div>
+        {% if user.is_authenticated %}
+        <a href="{% url 'post_job' %}" class="jl-post-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Post a Job
+        </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <form method="GET" class="jl-filter-bar">
+      <div class="jl-fg">
+        <label>Category</label>
+        <select name="job_type" class="jl-select">
+          <option value="">All Categories</option>
+          <option value="intern"   {% if selected_type == "intern" %}selected{% endif %}>Internships</option>
+          <option value="fresher"  {% if selected_type == "fresher" %}selected{% endif %}>Freshers</option>
+          <option value="fulltime" {% if selected_type == "fulltime" %}selected{% endif %}>Full Time</option>
+        </select>
+      </div>
+
+      <div class="jl-fg">
+        <label>Skill</label>
+        <select name="skill" class="jl-select">
+          <option value="">All Skills</option>
+          {% for s in skills %}
+          <option value="{{ s }}" {% if selected_skill == s %}selected{% endif %}>
+            {{ s|capfirst }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <button type="submit" class="jl-filter-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Search
+      </button>
+
+      {% if request.GET.job_type or request.GET.skill %}
+        <a href="{% url 'job_list' %}" class="jl-clear">✕ Clear</a>
+      {% endif %}
+    </form>
+
+    <!-- Jobs Grid -->
+    <div class="jl-grid">
+      {% for job in jobs %}
+      <a href="{% url 'job_detail' job.id %}" class="jl-card" style="animation: jlFadeUp .45s ease both;">
+
+        <div class="jl-card-top">
+          <div class="jl-logo {% cycle 'lv1' 'lv2' 'lv3' 'lv4' 'lv5' %}">
+            {{ job.company|first|upper }}
+          </div>
+
+          {% if job.job_type == "intern" %}
+            <span class="jl-type-badge tb-intern">Internship</span>
+          {% elif job.job_type == "fresher" %}
+            <span class="jl-type-badge tb-fresher">Fresher</span>
+          {% elif job.job_type == "fulltime" %}
+            <span class="jl-type-badge tb-fulltime">Full Time</span>
+          {% else %}
+            <span class="jl-type-badge tb-default">{{ job.job_type }}</span>
+          {% endif %}
+        </div>
+
+        <div class="jl-card-title">{{ job.title }}</div>
+
+        <div class="jl-company-row">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          {{ job.company }} &nbsp;·&nbsp; {{ job.location }}
+        </div>
+
+        <div class="jl-chips">
+          {% if job.skill %}
+          <span class="jl-chip">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            {{ job.skill }}
+          </span>
+          {% endif %}
+          <span class="jl-chip">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            {{ job.location }}
+          </span>
+        </div>
+
+        <div class="jl-card-footer">
+          <div class="jl-salary">{% if job.salary and job.salary > 0 %}₹{% widthratio job.salary 100000 12 %} <small>LPA</small>{% else %}<span style="font-size:.78rem;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-weight:500">Pay not provided</span>{% endif %}</div>
+          <span class="jl-view-btn">View Details →</span>
+        </div>
+
+      </a>
+
+      {% empty %}
+      <div class="jl-empty">
+        <div class="jl-empty-icon">🔍</div>
+        <h3>No jobs found</h3>
+        <p>Try adjusting your filters or check back soon for new openings.</p>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

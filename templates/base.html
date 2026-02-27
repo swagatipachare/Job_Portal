@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Job Portal{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    {% include 'navbar.html' %}
+
+    {% block full_width %}{% endblock %}
+
+    <div class="jp-page-container{% block container_class %}{% endblock %}">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="jp-footer" style="margin-top:auto;">
+        <div class="jp-footer-inner">
+            <div class="jp-footer-brand">
+                <div class="jp-footer-logo">💼</div>
+                <span class="jp-footer-name">JobPortal</span>
+            </div>
+            <p class="jp-footer-copy">© 2026 Job Portal. All Rights Reserved.</p>
+            <div class="jp-footer-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

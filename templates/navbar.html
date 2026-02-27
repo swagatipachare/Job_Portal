@@ -1,0 +1,432 @@
+{% load static %}
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+  .jp-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 0 2rem;
+    height: 66px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(7, 13, 26, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,.07);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  /* subtle top glow line */
+  .jp-nav::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(79,142,247,.5), rgba(14,165,233,.5), transparent);
+  }
+
+  /* ── BRAND ── */
+  .jp-nav-brand {
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .jp-nav-logo {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, #4f8ef7, #0ea5e9);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 14px rgba(79,142,247,.4);
+    flex-shrink: 0;
+    transition: transform .2s, box-shadow .2s;
+  }
+
+  .jp-nav-brand:hover .jp-nav-logo {
+    transform: rotate(-8deg) scale(1.08);
+    box-shadow: 0 6px 20px rgba(79,142,247,.55);
+  }
+
+  .jp-nav-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    letter-spacing: -.02em;
+  }
+
+  .jp-nav-name span {
+    background: linear-gradient(120deg, #4f8ef7, #2dd4bf);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── CENTER LINKS ── */
+  .jp-nav-links {
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .jp-nav-link {
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: .88rem;
+    font-weight: 500;
+    padding: .45rem .9rem;
+    border-radius: 8px;
+    transition: color .18s, background .18s;
+    display: flex;
+    align-items: center;
+    gap: .35rem;
+    white-space: nowrap;
+  }
+
+  .jp-nav-link:hover {
+    color: #e2e8f0;
+    background: rgba(255,255,255,.06);
+  }
+
+  .jp-nav-link.active {
+    color: #4f8ef7;
+    background: rgba(79,142,247,.1);
+  }
+
+  .jp-nav-link svg { opacity: .7; flex-shrink: 0; }
+  .jp-nav-link:hover svg { opacity: 1; }
+
+  /* ── RIGHT ACTIONS ── */
+  .jp-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    flex-shrink: 0;
+  }
+
+  /* ghost link */
+  .jp-nav-ghost {
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: .88rem;
+    font-weight: 600;
+    padding: .45rem .9rem;
+    border-radius: 8px;
+    transition: color .18s, background .18s;
+    display: flex;
+    align-items: center;
+    gap: .35rem;
+  }
+
+  .jp-nav-ghost:hover {
+    color: #e2e8f0;
+    background: rgba(255,255,255,.06);
+  }
+
+  /* cta button */
+  .jp-nav-cta {
+    background: linear-gradient(135deg, #4f8ef7, #0ea5e9);
+    color: #fff !important;
+    text-decoration: none;
+    font-size: .88rem;
+    font-weight: 700;
+    padding: .48rem 1.15rem;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    gap: .35rem;
+    transition: transform .15s, box-shadow .2s;
+    box-shadow: 0 4px 16px rgba(79,142,247,.35);
+    white-space: nowrap;
+  }
+
+  .jp-nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(79,142,247,.5);
+  }
+
+  /* user pill when logged in */
+  .jp-nav-user {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: 999px;
+    padding: .3rem .9rem .3rem .35rem;
+  }
+
+  .jp-nav-avatar {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .75rem;
+    font-weight: 700;
+    color: #fff;
+    font-family: 'Space Grotesk', sans-serif;
+    flex-shrink: 0;
+  }
+
+  .jp-nav-username {
+    font-size: .82rem;
+    font-weight: 600;
+    color: #cbd5e1;
+    max-width: 90px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* logout link */
+  .jp-nav-logout {
+    color: #64748b;
+    text-decoration: none;
+    font-size: .82rem;
+    font-weight: 600;
+    padding: .4rem .75rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,.07);
+    transition: color .18s, background .18s, border-color .18s;
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+  }
+
+  .jp-nav-logout:hover {
+    color: #ef4444;
+    background: rgba(239,68,68,.08);
+    border-color: rgba(239,68,68,.2);
+  }
+
+  /* divider */
+  .jp-nav-divider {
+    width: 1px;
+    height: 20px;
+    background: rgba(255,255,255,.1);
+    flex-shrink: 0;
+  }
+
+  /* ── MOBILE TOGGLE ── */
+  .jp-nav-toggle {
+    display: none;
+    background: none;
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 8px;
+    padding: .45rem .55rem;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .jp-nav-toggle span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: #94a3b8;
+    border-radius: 2px;
+    transition: transform .25s, opacity .25s, width .25s;
+  }
+
+  .jp-nav-toggle.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .jp-nav-toggle.open span:nth-child(2) { opacity: 0; width: 0; }
+  .jp-nav-toggle.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+  /* ── MOBILE MENU ── */
+  .jp-nav-mobile {
+    display: none;
+    position: fixed;
+    top: 66px;
+    left: 0; right: 0;
+    background: rgba(7,13,26,.97);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(255,255,255,.07);
+    padding: 1.2rem 1.5rem 1.8rem;
+    flex-direction: column;
+    gap: .4rem;
+    z-index: 999;
+    animation: slideDown .2s ease;
+  }
+
+  @keyframes slideDown {
+    from { opacity:0; transform: translateY(-10px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+
+  .jp-nav-mobile.open { display: flex; }
+
+  .jp-mobile-link {
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: .92rem;
+    font-weight: 500;
+    padding: .7rem 1rem;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    transition: color .18s, background .18s;
+  }
+
+  .jp-mobile-link:hover, .jp-mobile-link.active {
+    color: #e2e8f0;
+    background: rgba(255,255,255,.06);
+  }
+
+  .jp-mobile-divider {
+    height: 1px;
+    background: rgba(255,255,255,.07);
+    margin: .5rem 0;
+  }
+
+  .jp-mobile-cta {
+    background: linear-gradient(135deg, #4f8ef7, #0ea5e9);
+    color: #fff;
+    text-decoration: none;
+    font-size: .92rem;
+    font-weight: 700;
+    padding: .8rem 1rem;
+    border-radius: 10px;
+    text-align: center;
+    margin-top: .3rem;
+    display: block;
+    transition: opacity .2s;
+  }
+
+  .jp-mobile-cta:hover { opacity: .88; }
+
+  /* push page content below fixed nav */
+  body { padding-top: 66px !important; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 820px) {
+    .jp-nav-links  { display: none; }
+    .jp-nav-actions { display: none; }
+    .jp-nav-toggle  { display: flex; }
+  }
+</style>
+
+<!-- ══ NAVBAR ══ -->
+<nav class="jp-nav">
+
+  <!-- Brand -->
+  <a href="{% url 'home' %}" class="jp-nav-brand">
+    <div class="jp-nav-logo">💼</div>
+    <span class="jp-nav-name">Job<span>Portal</span></span>
+  </a>
+
+  <!-- Center links -->
+  <div class="jp-nav-links">
+    <a href="{% url 'home' %}" class="jp-nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </a>
+    <a href="{% url 'job_list' %}" class="jp-nav-link {% if request.resolver_match.url_name == 'job_list' %}active{% endif %}">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+      Jobs
+    </a>
+  </div>
+
+  <!-- Right actions -->
+  <div class="jp-nav-actions">
+    {% if user.is_authenticated %}
+      <div class="jp-nav-user">
+        <div class="jp-nav-avatar">{{ user.username|first|upper }}</div>
+        <span class="jp-nav-username">{{ user.username }}</span>
+      </div>
+
+      <div class="jp-nav-divider"></div>
+
+      <a href="{% url 'dashboard' %}" class="jp-nav-ghost">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+
+      <a href="{% url 'logout' %}" class="jp-nav-logout">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Logout
+      </a>
+
+    {% else %}
+      <a href="{% url 'login' %}" class="jp-nav-ghost">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        Login
+      </a>
+      <a href="{% url 'register' %}" class="jp-nav-cta">
+        ✨ Get Started
+      </a>
+    {% endif %}
+  </div>
+
+  <!-- Mobile toggle -->
+  <button class="jp-nav-toggle" id="jp-toggle" onclick="toggleMobileNav()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile menu -->
+<div class="jp-nav-mobile" id="jp-mobile-menu">
+  <a href="{% url 'home' %}" class="jp-mobile-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Home
+  </a>
+  <a href="{% url 'job_list' %}" class="jp-mobile-link {% if request.resolver_match.url_name == 'job_list' %}active{% endif %}">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+    Jobs
+  </a>
+
+  <div class="jp-mobile-divider"></div>
+
+  {% if user.is_authenticated %}
+    <a href="{% url 'dashboard' %}" class="jp-mobile-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard ({{ user.username }})
+    </a>
+    <a href="{% url 'logout' %}" class="jp-mobile-link" style="color:#ef4444;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Logout
+    </a>
+  {% else %}
+    <a href="{% url 'login' %}" class="jp-mobile-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      Login
+    </a>
+    <a href="{% url 'register' %}" class="jp-mobile-cta">✨ Get Started — It's Free</a>
+  {% endif %}
+</div>
+
+<script>
+  function toggleMobileNav() {
+    const btn  = document.getElementById('jp-toggle');
+    const menu = document.getElementById('jp-mobile-menu');
+    btn.classList.toggle('open');
+    menu.classList.toggle('open');
+  }
+
+  // Close mobile menu on outside click
+  document.addEventListener('click', function(e) {
+    const btn  = document.getElementById('jp-toggle');
+    const menu = document.getElementById('jp-mobile-menu');
+    if (!btn.contains(e.target) && !menu.contains(e.target)) {
+      btn.classList.remove('open');
+      menu.classList.remove('open');
+    }
+  });
+</script>
