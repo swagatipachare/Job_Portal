@@ -1,0 +1,1 @@
+web: gunicorn Job_Portal.wsgi
