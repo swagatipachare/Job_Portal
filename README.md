@@ -3,7 +3,7 @@
 A full-stack job portal built with Django, featuring real-time job fetching from Indeed, LinkedIn & Google Jobs via the JSearch API. Dark-themed, mobile responsive UI with user profiles, resume uploads, and admin management.
 
 ---
-Live Demo: https://job-portal-k062.onrender.com
+
 
 ## 🚀 Features
 
